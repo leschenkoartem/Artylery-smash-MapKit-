@@ -15,7 +15,7 @@ final class MainViewModel: NSObject, ObservableObject, CLLocationManagerDelegate
     @Published var detents = PresentationDetent.fraction(0.2)
     
     @Published var shootInfo: InfoShoot? { didSet { self.shouldDrawLine = shootInfo != nil } }
-    @Published var infinityRange = false
+    @Published var infinityRange = true
     
     // firstVersion
     @Published var yourLongitudeInput = "" { willSet { self.shootInfo = nil } }
@@ -23,6 +23,7 @@ final class MainViewModel: NSObject, ObservableObject, CLLocationManagerDelegate
     @Published var anamyLongitudeInput = "" { willSet { self.shootInfo = nil } }
     @Published var anamyLatitudeInput = "" { willSet { self.shootInfo = nil } }
     @Published var shouldDrawLine = false
+    @Published var typeIfLine = TypeOfVisual.line
     
     //secondVrsion
     @Published var youCoordinateAutomatic = "" { willSet { self.shootInfo = nil } }
@@ -41,6 +42,12 @@ final class MainViewModel: NSObject, ObservableObject, CLLocationManagerDelegate
     
     enum TypeOfInput {
         case custom, automatic
+    }
+    
+    enum TypeOfVisual: String, CaseIterable {
+        case line = "line"
+        case way = "way"
+        case all = "all"
     }
     
     private let locationManager = CLLocationManager()

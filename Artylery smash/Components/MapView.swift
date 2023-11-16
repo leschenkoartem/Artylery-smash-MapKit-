@@ -16,14 +16,16 @@ struct MapView: UIViewRepresentable {
     @Binding var showWithHading: Bool
     @Binding var drawPolyline: Bool
     @Binding var needToShowUser: Bool
+    @Binding var typeOfVisual: MainViewModel.TypeOfVisual
     var coordForFire: [CLLocationCoordinate2D]
 
-    public init(region: Binding<MKCoordinateRegion>, mapType: Binding<MKMapType>, showWithHading: Binding<Bool>, drawPolyline: Binding<Bool>, needToShowUser: Binding<Bool>, coordForFire: [CLLocationCoordinate2D]) {
+    public init(region: Binding<MKCoordinateRegion>, mapType: Binding<MKMapType>, showWithHading: Binding<Bool>, drawPolyline: Binding<Bool>, needToShowUser: Binding<Bool>, coordForFire: [CLLocationCoordinate2D], typeOfVisual: Binding<MainViewModel.TypeOfVisual>) {
         _region = region
         _mapType = mapType
         _showWithHading = showWithHading
         _drawPolyline = drawPolyline
         _needToShowUser = needToShowUser
+        _typeOfVisual = typeOfVisual
         self.coordForFire = coordForFire
     }
 
@@ -49,9 +51,19 @@ struct MapView: UIViewRepresentable {
         uiView.userTrackingMode = showWithHading ? .followWithHeading : .none
 
         if drawPolyline {
-            updatePolyline(on: uiView)
+            uiView.removeOverlays(uiView.overlays)
+            switch typeOfVisual {
+            case .line:
+                updatePolyline(on: uiView)
+            case .way:
+                updateRoute(on: uiView) // Змінено виклик на функцію для відображення маршруту
+            case .all:
+                updatePolyline(on: uiView)
+                updateRoute(on: uiView)
+            }
+            
         } else {
-            // Якщо drawPolyline == false, то очищаємо всі лінії та кільця
+            // Якщо drawPolyline == false, то очищаємо всі маршрути та кільця
             uiView.removeOverlays(uiView.overlays)
             uiView.removeOverlays(uiView.overlays.filter { $0 is MKCircle }) // Очистка кіл
         }
@@ -72,7 +84,7 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
             if overlay is MKPolyline {
                 let renderer = MKPolylineRenderer(overlay: overlay)
-                renderer.strokeColor = UIColor.blue
+                renderer.strokeColor = UIColor.red
                 renderer.lineWidth = 2.0
                 return renderer
             } else if overlay is MKCircle {
@@ -88,9 +100,6 @@ struct MapView: UIViewRepresentable {
 
     private func updatePolyline(on mapView: MKMapView) {
         let polyline = MKPolyline(coordinates: coordForFire, count: coordForFire.count)
-
-        // Очищаємо попередні лінії перед додаванням нової
-        mapView.removeOverlays(mapView.overlays)
 
         mapView.addOverlay(polyline)
 
@@ -121,5 +130,39 @@ struct MapView: UIViewRepresentable {
             addCircle(on: mapView, coordinate: coordinate)
         }
     }
+    
+    
+    private func updateRoute(on mapView: MKMapView) {
+            guard coordForFire.count >= 2 else {
+                return
+            }
+
+            let sourcePlacemark = MKPlacemark(coordinate: coordForFire[0])
+            let destinationPlacemark = MKPlacemark(coordinate: coordForFire[coordForFire.count - 1])
+
+            let sourceMapItem = MKMapItem(placemark: sourcePlacemark)
+            let destinationMapItem = MKMapItem(placemark: destinationPlacemark)
+
+            let request = MKDirections.Request()
+            request.source = sourceMapItem
+            request.destination = destinationMapItem
+            request.transportType = .automobile // або .automobile, залежно від вашого вибору
+
+            let directions = MKDirections(request: request)
+            directions.calculate { response, error in
+                guard let route = response?.routes.first else {
+                    return
+                }
+
+                mapView.addOverlay(route.polyline, level: .aboveRoads)
+            }
+        }
+
+        private func addRouteCircles(on mapView: MKMapView, route: MKRoute) {
+            // Опціонально, якщо ви хочете додатково відображати кільця на точках маршруту
+            for step in route.steps {
+                addCircle(on: mapView, coordinate: step.polyline.coordinate)
+            }
+        }
 }
 

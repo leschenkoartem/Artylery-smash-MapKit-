@@ -19,7 +19,8 @@ struct MainView: View {
                     showWithHading: $vm.followHead,
                     drawPolyline: $vm.shouldDrawLine,
                     needToShowUser: $vm.needToShowUser,
-                    coordForFire: vm.getCoordinates())
+                    coordForFire: vm.getCoordinates(), 
+                    typeOfVisual: $vm.typeIfLine)
                             .edgesIgnoringSafeArea(.all)
                             .environmentObject(vm)
             
@@ -126,6 +127,7 @@ struct MainView: View {
                     }
                 } label: {
                     Text("Switch input")
+                        .customButton()
                 }
                 
                 Spacer()
@@ -133,7 +135,23 @@ struct MainView: View {
                     vm.infinityRange.toggle()
                 } label: {
                     Text("Inf (\(vm.infinityRange.description))")
+                        .customButton()
                 }
+                Spacer()
+                
+                Menu {
+                    ForEach(MainViewModel.TypeOfVisual.allCases, id: \.self) { item in
+                        Button {
+                            vm.typeIfLine = item
+                        } label: {
+                            Text("\(item.rawValue)")
+                        }
+                    }
+                } label: {
+                    Text("\(vm.typeIfLine.rawValue)")
+                        .customButton()
+                }
+                
                 Spacer()
                 
                 Button {
@@ -143,6 +161,7 @@ struct MainView: View {
                     }
                 } label: {
                     Text("Calculate")
+                        .customButton()
                 }
             }
             .alert(isPresented: $vm.showAlert) {
@@ -160,7 +179,16 @@ struct MainView: View {
     MainView()
 }
 
-
+extension View {
+    func customButton() -> some View {
+        self
+            .padding(5)
+            .padding(.horizontal, 5)
+            .background(Color(.blue))
+            .cornerRadius(12)
+            .foregroundColor(Color(.label))
+    }
+}
 
 
 
