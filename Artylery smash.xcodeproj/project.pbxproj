@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E35C1FEF2B06564900F247C3 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C1FEE2B06564900F247C3 /* MapView.swift */; };
 		E37825D22B04120F008F6FAF /* Artylery_smashApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37825D12B04120F008F6FAF /* Artylery_smashApp.swift */; };
 		E37825D42B04120F008F6FAF /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37825D32B04120F008F6FAF /* MainView.swift */; };
 		E37825D62B041212008F6FAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E37825D52B041212008F6FAF /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E35C1FEE2B06564900F247C3 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		E37825CE2B04120F008F6FAF /* Artylery smash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Artylery smash.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E37825D12B04120F008F6FAF /* Artylery_smashApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artylery_smashApp.swift; sourceTree = "<group>"; };
 		E37825D32B04120F008F6FAF /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -37,6 +39,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E35C1FED2B06563400F247C3 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E37825E22B042BE5008F6FAF /* CustomSheet.swift */,
+				E35C1FEE2B06564900F247C3 /* MapView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		E35C1FF02B06586800F247C3 /* Main content */ = {
+			isa = PBXGroup;
+			children = (
+				E37825DF2B041220008F6FAF /* MainViewModel.swift */,
+				E37825D32B04120F008F6FAF /* MainView.swift */,
+			);
+			path = "Main content";
+			sourceTree = "<group>";
+		};
 		E37825C52B04120E008F6FAF = {
 			isa = PBXGroup;
 			children = (
@@ -56,12 +76,11 @@
 		E37825D02B04120F008F6FAF /* Artylery smash */ = {
 			isa = PBXGroup;
 			children = (
-				E37825E12B041333008F6FAF /* Artylery-smash-Info.plist */,
-				E37825DF2B041220008F6FAF /* MainViewModel.swift */,
-				E37825E22B042BE5008F6FAF /* CustomSheet.swift */,
 				E37825D12B04120F008F6FAF /* Artylery_smashApp.swift */,
-				E37825D32B04120F008F6FAF /* MainView.swift */,
+				E35C1FF02B06586800F247C3 /* Main content */,
+				E35C1FED2B06563400F247C3 /* Components */,
 				E37825D52B041212008F6FAF /* Assets.xcassets */,
+				E37825E12B041333008F6FAF /* Artylery-smash-Info.plist */,
 				E37825D72B041212008F6FAF /* Preview Content */,
 			);
 			path = "Artylery smash";
@@ -147,6 +166,7 @@
 			files = (
 				E37825E32B042BE5008F6FAF /* CustomSheet.swift in Sources */,
 				E37825D42B04120F008F6FAF /* MainView.swift in Sources */,
+				E35C1FEF2B06564900F247C3 /* MapView.swift in Sources */,
 				E37825E02B041220008F6FAF /* MainViewModel.swift in Sources */,
 				E37825D22B04120F008F6FAF /* Artylery_smashApp.swift in Sources */,
 			);
