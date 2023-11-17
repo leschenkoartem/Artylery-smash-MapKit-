@@ -11,6 +11,8 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject var vm = MainViewModel()
+    @Environment(\.verticalSizeClass) var horizontalSizeClass
+    @State var showSheet = true
     
     var body: some View {
         ZStack {
@@ -69,8 +71,23 @@ struct MainView: View {
                     }
                 }.padding(.trailing)
             }
+            .onChange(of: horizontalSizeClass) { newValue in
+                switch newValue {
+                case .compact:
+                    showSheet = false
+                    print("1")
+                case .regular:
+                    showSheet = true
+                    print("2")
+                case .none:
+                    showSheet = true
+                    print("3")
+                case .some(_):
+                    showSheet = true
+                }
+            }
         }
-        .sheet(isPresented: .constant(true)) {
+        .sheet(isPresented: $showSheet) {
             sheetView()
                 .interactiveDismissDisabled()
                 .presentationDetents([.fraction(0.2)], largestUndimmed: .fraction(0.2))
@@ -134,7 +151,7 @@ struct MainView: View {
                 Button {
                     vm.infinityRange.toggle()
                 } label: {
-                    Text("Inf (\(vm.infinityRange.description))")
+                    Text("50km (\(vm.infinityRange.description))")
                         .customButton()
                 }
                 Spacer()
